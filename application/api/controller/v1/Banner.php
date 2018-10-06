@@ -10,7 +10,6 @@ namespace app\api\controller\v1;
 
 
 use app\api\validate\IDMustBePostiveInt;
-use think\Validate;
 
 class Banner
 {
