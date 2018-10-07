@@ -13,5 +13,6 @@ class Banner
 {
     public static function getBannerByID($id){
         //TODO:根据Banner ID号
+        return null;
     }
 }
