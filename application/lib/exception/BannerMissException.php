@@ -8,7 +8,7 @@
 
 namespace app\lib\exception;
 
-
+//BannerMiss时的错误信息
 class BannerMissException extends BaseException
 {
     public $code = 404;
