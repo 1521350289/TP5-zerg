@@ -10,5 +10,4 @@
 // +----------------------------------------------------------------------
 
 use think\Route;
-Route::rule('hello','test/test/test','GET|POST',['https'=>false]);
-Route::get('banner/:id','api/v1.Banner/getBanner');
+Route::get('api/v1/banner/:id','api/v1.Banner/getBanner');

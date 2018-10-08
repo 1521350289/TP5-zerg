@@ -34,6 +34,10 @@ class ExceptionHandler extends Handle
             $this->msg = $e->msg;
             $this->errorCode = $e->errorCode;
         }else{
+            //调试模式下
+            if (config('app_debug')){
+                return parent::render($e);
+            }
             //非自定义异常
             $this->code = 500;
             $this->msg = '服务器内部错误';
@@ -48,6 +52,8 @@ class ExceptionHandler extends Handle
         ];
         return json($result,$this->code);
     }
+
+    //日志记录
     private function recordErrorLog(Exception $e){
         Log::init([
             'type' => 'File',
