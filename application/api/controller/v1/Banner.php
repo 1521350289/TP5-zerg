@@ -23,13 +23,8 @@ class Banner
      */
     public function getBanner($id)
     {
-        /*$validate = new Validate([
-            'name'=>'require|max:10',
-            'email'=>'email'
-        ]);*/
         (new IDMustBePostiveInt())->goCheck();
-//        $banner = BannerModel::getBannerByID($id);
-        $banner = BannerModel::get($id);
+        $banner = BannerModel::with(['items','items.img'])->find($id);
         if (!$banner){
             throw new BannerMissException();
         }

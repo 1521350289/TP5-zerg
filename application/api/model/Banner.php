@@ -18,7 +18,9 @@ class Banner extends Model
     {
         return $this->hasMany('BannerItem','banner_id','id');
     }*/
-    protected $table = 'category';
+    public function items(){
+        return $this->hasMany('BannerItem','banner_id','id');
+    }
     public static function getBannerByID($id)
     {
         $result = Db::table('banner_item')
