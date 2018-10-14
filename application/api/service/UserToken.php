@@ -9,10 +9,12 @@
 namespace app\api\service;
 
 
+use app\lib\exception\TokenException;
 use app\lib\exception\WeChatException;
 use think\Exception;
+use app\api\model\User as UserModel;
 
-class UserToken
+class UserToken extends Token
 {
     protected $code;
     protected $wxAppID;
@@ -37,7 +39,7 @@ class UserToken
             if ($loginFail){
                 $this->processLoginError($wxResult);
             }else{
-                $this->grantToken($wxResult);
+                return $this->grantToken($wxResult);
             }
         }
     }
@@ -54,5 +56,45 @@ class UserToken
     private function grantToken($wxResult)
     {
         $openid = $wxResult['openid'];
+        $user = UserModel::getByOpenID($openid);
+        if ($user){
+            $uid = $user->id;
+        }else{
+            $uid = $this->newUser($openid);
+        }
+        $cachedValue = $this->prepareCachedValue($wxResult,$uid);
+        $token = $this->saveToCache($cachedValue);
+        return $token;
+    }
+
+    private function saveToCache($cacheValue)
+    {
+        $key = self::generateToken();
+        $value = json_encode($cacheValue);
+        $expire_in = config('setting.token_expire_in');
+        $request = cache($key,$value,$expire_in);
+        if (!$request){
+            throw new TokenException([
+                'msg' => '服务器缓存异常',
+                'errorCode' => 10005
+            ]);
+        }
+        return $key;
+    }
+
+    private function prepareCachedValue($wxResult,$uid)
+    {
+        $cachedValue = $wxResult;
+        $cachedValue['uid'] = $uid;
+        $cachedValue['scope'] = 16;
+        return $cachedValue;
+    }
+
+    private function newUser($opeid)
+    {
+        $user = UserModel::create([
+            'openid'=>$opeid
+        ]);
+        return $user->id;
     }
 }
