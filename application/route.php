@@ -13,9 +13,14 @@ use think\Route;
 Route::post('api/:version/token/user','api/:version.Token/getToken');
 
 Route::get('api/:version/banner/:id','api/:version.Banner/getBanner');
-Route::get('api/:version/theme','api/:version.Theme/getSimpleList');
-Route::get('api/:version/theme/:id','api/:version.Theme/getComplexOne');
 
-Route::get('api/:version/product/recent','api/:version.product/getRecent');
-Route::get('api/:version/product/by_category','api/:version.product/getAllInCategory');
+Route::get('api/:version/theme','api/:version.Theme/getSimpleList');
+Route::get('api/:version/theme/:id','api/:version.Theme/getComplexOne',[],['id'=>'\d+']);
+Route::group('api/:version/product',function (){
+    Route::get('/recent','api/:version.product/getRecent');
+    Route::get('/by_category','api/:version.product/getAllInCategory');
+    Route::get('/:id','api/:version.product/getOne');
+});
+
+
 Route::get('api/:version/category/all','api/:version.Category/getAllCategories');
