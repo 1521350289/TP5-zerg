@@ -24,3 +24,5 @@ Route::group('api/:version/product',function (){
 
 
 Route::get('api/:version/category/all','api/:version.Category/getAllCategories');
+
+Route::get('api/:version/address','api/:version.Address/createOrUpdateAddress');
