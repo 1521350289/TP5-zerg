@@ -54,6 +54,7 @@ class UserToken extends Token
             ]);
     }
 
+    //make token
     private function grantToken($wxResult)
     {
         $openid = $wxResult['openid'];
@@ -68,6 +69,7 @@ class UserToken extends Token
         return $token;
     }
 
+    //caching
     private function saveToCache($cacheValue)
     {
         $key = self::generateToken();
@@ -83,6 +85,8 @@ class UserToken extends Token
         return $key;
     }
 
+
+    //cache
     private function prepareCachedValue($wxResult,$uid)
     {
         $cachedValue = $wxResult;
@@ -92,6 +96,7 @@ class UserToken extends Token
         return $cachedValue;
     }
 
+    //create user
     private function newUser($opeid)
     {
         $user = UserModel::create([

@@ -28,3 +28,5 @@ Route::get('api/:version/category/all','api/:version.Category/getAllCategories')
 Route::get('api/:version/address','api/:version.Address/createOrUpdateAddress');
 
 Route::post('api/:version/order','api/:version.order/placeOrder');
+
+Route::post('api/:version/pay/pre_order','api/:version.Pay/getPreOrder');

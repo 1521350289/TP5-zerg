@@ -14,11 +14,12 @@ use app\api\model\Product;
 use app\api\model\UserAddress;
 use app\lib\exception\OrderException;
 use app\lib\exception\UserException;
+use think\Db;
 use think\Exception;
 
 class Order
 {
-    //订单商品列表，客户端传递
+    //订单信息，客户端传递
     protected $oProducts;
     //真实的商品信息 包括库存量
     protected $products;
@@ -46,6 +47,7 @@ class Order
     //生成订单数据写入数据库
     private function createOrder($snap)
     {
+        Db::startTrans();
         try{
             $orderNo = $this->makeOrderno();
             $order = new \app\api\model\Order();
@@ -66,12 +68,14 @@ class Order
             }
             $orderProduct = new OrderProduct();
             $orderProduct->saveAll($this->oProducts);
+            Db::commit();
             return [
                 'order_no' => $orderNo,
                 'order_id' => $orderID,
                 'create_time' => $create_time
             ];
         }catch (Exception $ex){
+            Db::rollback();
             throw $ex;
         }
     }
@@ -118,6 +122,16 @@ class Order
             ]);
         }
         return $userAddress->toArray();
+    }
+
+    public function checkOrderStock($orderID)
+    {
+        $oProducts = OrderProduct::where('order_id','=',$orderID)
+            ->select();
+        $this->oProducts = $oProducts;
+        $this->products = $this->getProductsByOrder($oProducts);
+        $status = $this->getOrderStatus();
+        return $status;
     }
 
     private function getOrderStatus()
