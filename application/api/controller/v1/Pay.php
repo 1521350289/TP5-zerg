@@ -12,7 +12,6 @@ namespace app\api\controller\v1;
 use app\api\controller\BaseController;
 use app\api\service\WxNotify;
 use app\api\validate\IDMustBePostiveInt;
-use Wx
 use app\api\service\Pay as PayService;
 
 class Pay extends BaseController
