@@ -20,6 +20,7 @@ class Pay extends BaseController
         'checkExclusiveScope' => ['only'=>'placeOrder']
     ];
 
+    //发起支付
     public function getPreOrder($id='')
     {
         (new IDMustBePostiveInt())->goCheck();
@@ -27,6 +28,7 @@ class Pay extends BaseController
         return $pay->pay();
     }
 
+    //支付回调
     public function receiveNotify()
     {
         //检查库存量，超卖

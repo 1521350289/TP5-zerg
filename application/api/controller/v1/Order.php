@@ -35,6 +35,7 @@ class Order extends BaseController
         'checkExclusiveScope' => ['only'=>'placeOrder']
     ];
 
+    //订单 创建
     public function placeOrder()
     {
         (new OrderPlace())->goCheck();

@@ -41,6 +41,7 @@ class Pay
         //库存量检测
         $this->checkOrderValid();
         $orderService = new OrderService();
+        //库存检测
         $status = $orderService->checkOrderStock($this->orderID);
         if (!$status['pass']){
             return $status;
@@ -48,8 +49,10 @@ class Pay
         return $this->makeWxPreOrder($status['orderPrice']);
     }
 
+    //统一下单
     private function makeWxPreOrder($totalPrice)
     {
+        //获取token对应value
         $openid = Token::getCurrentTokenVar('openid');
         if (!$openid){
             throw new TokenException();
@@ -66,12 +69,13 @@ class Pay
 
     private function getPaySignature($wxOrderDate)
     {
-        $config = new \WxPayConfig();
+        $config = new WxConfig();
         $wxOrder = \WxPayApi::unifiedOrder($config,$wxOrderDate);
         if ($wxOrder['return_code']!='SUCCESS'||$wxOrder['result_code']!='SUCCESS'){
             Log::record($wxOrder,'error');
             Log::record('获取预支付订单失败','error');
         }
+        echo 123;
         return null;
     }
 

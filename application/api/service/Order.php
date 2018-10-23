@@ -109,6 +109,7 @@ class Order
         if (count($this->products)>1){
             $snap['snapName'].='等';
         }
+        return $snap;
     }
 
     private function getUserAddress()
@@ -124,6 +125,7 @@ class Order
         return $userAddress->toArray();
     }
 
+    //库存检测
     public function checkOrderStock($orderID)
     {
         $oProducts = OrderProduct::where('order_id','=',$orderID)
