@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\application",
+    "\\application\\api",
+    "\\application\\api\\controller",
+    "\\application\\api\\controller\\v1"
+  ],
+  "PreviewInSolutionExplorer": false
+}
