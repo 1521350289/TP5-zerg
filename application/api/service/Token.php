@@ -99,4 +99,15 @@ class Token
         }
         return false;
     }
+
+    //cache中是否有这个token
+    public static function verifyToken($token)
+    {
+        $exist = Cache::get($token);
+        if ($exist){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

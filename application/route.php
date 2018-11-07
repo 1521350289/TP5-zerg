@@ -10,7 +10,12 @@
 // +----------------------------------------------------------------------
 
 use think\Route;
-Route::post('api/:version/token/user','api/:version.Token/getToken');
+
+Route::group('api/:version/token',function (){
+    Route::post('/user','api/:version.Token/getToken');
+    Route::post('/verify','api/:version.Token/verifyToken');
+});
+
 
 Route::get('api/:version/banner/:id','api/:version.Banner/getBanner');
 
