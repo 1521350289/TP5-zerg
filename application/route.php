@@ -32,6 +32,7 @@ Route::get('api/:version/category/all','api/:version.Category/getAllCategories')
 
 //地址 添加 更新
 Route::post('api/:version/address','api/:version.Address/createOrUpdateAddress');
+Route::get('api/:version/address','api/:version.Address/getUserAddress');
 
 Route::post('api/:version/order','api/:version.order/placeOrder');
 Route::post('api/:version/order/by_usr','api/:version.order/getSummaryByUser');
