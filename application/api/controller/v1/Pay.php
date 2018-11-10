@@ -28,14 +28,36 @@ class Pay extends BaseController
         return $pay->pay();
     }
 
+
+    public function redirectNotify()
+    {
+        $notify = new WxNotify();
+        $notify->handle();
+    }
+
+    public function notifyConcurrency()
+    {
+        $notify = new WxNotify();
+        $notify->handle();
+    }
+
+
+
     //支付回调
     public function receiveNotify()
     {
         //检查库存量，超卖
         //更新订单status
         //减库存
+
+//        $xmlData = file_get_contents('php://input');
+//        Log::error($xmlData);
         $notify = new WxNotify();
-        $config = new \WxPayConfig();
-        $notify->Handle($config);
+        $notify->handle();
+//        $xmlData = file_get_contents('php://input');
+//        $result = curl_post_raw('http:/zerg.cn/api/v1/pay/re_notify?XDEBUG_SESSION_START=13133',
+//            $xmlData);
+//        return $result;
+//        Log::error($xmlData);
     }
 }
