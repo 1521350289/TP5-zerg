@@ -9,19 +9,15 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\BaseController;
+use app\api\model\Order as OrderModel;
+use app\api\service\Order as OrderService;
 use app\api\service\Token as TokenService;
-
-
 use app\api\validate\IDMustBePostiveInt;
 use app\api\validate\OrderPlace;
-use app\api\service\Order as OrderService;
 use app\api\validate\PagingParameter;
-use app\api\model\Order as OrderModel;
-use app\lib\enum\ScopeEnum;
-use app\lib\exception\ForbiddenException;
 use app\lib\exception\OrderException;
-use app\lib\exception\TokenException;
-use think\Controller;
+use app\lib\exception\SuccessMessage;
+
 
 class Order extends BaseController
 {
@@ -60,6 +56,25 @@ class Order extends BaseController
         ];
     }
     
+    //获取所有订单信息
+    public function getSummary($page=1,$size=20)
+    {
+        (new PagingParameter())->goCheck();
+        $pagingOrders = OrderModel::getSummaryByPage($page,$size);
+        if ($pagingOrders->isEmpty()){
+            return [
+                'current_page'  =>  $pagingOrders->currentPage(),
+                'data'  =>  []
+            ];
+        }
+        $data = $pagingOrders->hidden(['snap_items','snap_address'])
+            ->toArray();
+        return [
+            'current_page'  =>  $pagingOrders->currentPage(),
+            'data'  =>  $data
+        ];
+    }
+    
     //订单详情
     public function getDetail($id)
     {
@@ -81,5 +96,15 @@ class Order extends BaseController
         $order = new OrderService();
         $status = $order->place($uid,$products);
         return $status;
+    }
+
+    public function delivery($id)
+    {
+        (new IDMustBePostiveInt())->goCheck();
+        $order = new OrderService();
+        $success = $order->delivery($id);
+        if ($success){
+            return new SuccessMessage();
+        }
     }
 }
